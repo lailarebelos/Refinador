@@ -16,6 +16,7 @@ Escrito para quem não tem experiência com programação.
 7. [No dia a dia: abrir e fechar os programas](#7-no-dia-a-dia-abrir-e-fechar-os-programas)
 8. [Problemas comuns e como resolver](#8-problemas-comuns-e-como-resolver)
 9. [Limitações importantes](#9-limitações-importantes)
+10. [Para quem administra os repositórios](#10-para-quem-administra-os-repositórios)
 
 ---
 
@@ -138,9 +139,10 @@ Os dois programas usam inteligência artificial, mas de formas diferentes:
 normalmente; você só perde dois recursos: os nomes de variáveis sugeridos por IA
 e a análise de sentimento das respostas abertas.
 
-**O Explorador não funciona sem a chave da Localiza** e sem a VPN da empresa
-ativa, porque ele conversa com um serviço interno. Veja o item
-[Limitações](#9-limitações-importantes).
+**O Explorador precisa da chave da Localiza e da VPN ligada.** Ele conversa com
+um serviço de IA interno da empresa, que só responde a quem está na rede
+corporativa. Isso **não** significa estar no escritório: basta conectar a VPN
+(**GlobalProtect**) e ele funciona de casa, de viagem, de qualquer lugar.
 
 Onde obter as chaves do Refinador, se quiser usá-las:
 - Claude (Anthropic): https://console.anthropic.com
@@ -151,10 +153,61 @@ Onde obter as chaves do Refinador, se quiser usá-las:
 > crédito atrelado. Nunca mande por e-mail, nunca cole em conversa de grupo,
 > nunca publique em nenhum lugar. Cada pessoa deve usar a própria chave.
 
-### 2.4 Os arquivos dos programas
+### 2.4 Baixando os programas do GitHub
 
-Baixe as duas pastas (`Refinador` e `Explorador`) e coloque-as em um lugar
-simples do computador, por exemplo:
+O código dos dois programas fica guardado no GitHub — um site onde programas são
+armazenados e versionados. Você não precisa entender nada dele: para nós é só um
+lugar de onde se baixa uma pasta compactada.
+
+Os endereços são:
+
+| Programa | Endereço |
+|---|---|
+| **Refinador** | https://github.com/lailarebelos/Refinador |
+| **Explorador** | https://github.com/lailarebelos/Explorador |
+
+#### Se a página disser "404 Not Found"
+
+Não é erro de digitação nem link quebrado. Os dois repositórios são **privados**,
+e o GitHub esconde totalmente o que você não tem permissão de ver — em vez de
+dizer "sem acesso", ele finge que a página não existe.
+
+Para resolver: peça acesso à responsável (Laila Santos) informando o seu nome de
+usuário do GitHub. Se você ainda não tem conta, crie uma gratuita em
+https://github.com/signup. Você vai receber um convite por e-mail; **é preciso
+abrir o e-mail e aceitar** antes que o link funcione.
+
+#### Como baixar
+
+1. Abra o endereço do programa no navegador.
+2. Clique no botão verde **`Code`**, no canto superior direito da lista de
+   arquivos.
+3. No menu que abre, clique em **`Download ZIP`**.
+4. O navegador baixa um arquivo tipo `Refinador-main.zip`.
+5. Clique com o botão direito nele e escolha `Extrair tudo...`.
+6. Extraia para uma pasta curta — veja a recomendação de local mais abaixo.
+
+> A pasta que sai do ZIP pode vir com `-main` no nome (`Refinador-main`). Pode
+> renomear para `Programa Refinador` sem problema — o programa não depende do
+> nome da pasta.
+
+#### Você não corre risco de estragar nada
+
+Baixar cria uma **cópia** na sua máquina. Nada do que você fizer nessa cópia
+afeta o original no GitHub, e nem as cópias das outras pessoas. Alterar o
+original exige permissão de escrita, que os convidados não recebem. Pode mexer,
+testar e até apagar sem medo — se der errado, baixe de novo.
+
+#### Para conferir se saiu versão nova
+
+Volte ao endereço do programa: a data da última alteração aparece ao lado da
+lista de arquivos. Se for mais recente que a sua cópia, baixe novamente. Guarde
+seus arquivos de trabalho (planilhas geradas) fora da pasta do programa, para não
+perdê-los ao substituir.
+
+### 2.5 Onde colocar os arquivos
+
+Coloque as duas pastas em um lugar simples do computador, por exemplo:
 
 ```
 C:\Programa Refinador
@@ -397,6 +450,11 @@ pressione `Ctrl+C` na janela ou simplesmente feche-a.
 
 ## 6. Usando o Explorador
 
+> **Antes de começar: ligue a VPN.** Abra o **GlobalProtect** e confirme que está
+> conectado. O Explorador abre e recebe a planilha sem VPN, mas nenhuma pergunta
+> será respondida. Com a VPN ligada funciona de qualquer lugar — casa, viagem,
+> escritório.
+
 1. Acesse o endereço que apareceu na janela preta.
 2. Envie a planilha `_normalized.xlsx` que o Refinador gerou.
 3. O programa mostra um resumo: quantos respondentes, quantas colunas, quantas
@@ -506,7 +564,13 @@ exemplo) ou a chave não foi colada. Revise o Passo 2 da instalação do
 Explorador.
 
 ### "Não foi possível conectar ao serviço de IA. Verifique se a VPN da Localiza está ativa"
-Exatamente o que a mensagem diz. Conecte a VPN e recarregue a página.
+É o erro mais comum do Explorador, e a solução é simples: **abra o GlobalProtect
+e conecte a VPN.** Depois recarregue a página no navegador (`F5`) e faça a
+pergunta de novo.
+
+Não é preciso reiniciar o programa nem enviar a planilha outra vez — só conectar
+e recarregar. Se a VPN cair no meio do uso, o mesmo erro reaparece: reconecte e
+siga de onde estava.
 
 ### "Arquivo inválido: aba 'data' não encontrada"
 A planilha enviada ao Explorador não veio do Refinador. Use o arquivo que
@@ -546,9 +610,14 @@ comentários abertos que você mandar analisar; no Explorador, o codebook, as
 estatísticas calculadas e uma amostra das primeiras linhas — enviados a cada
 pergunta que você faz. Considere isso antes de usar com dados sensíveis.
 
-**O Explorador exige rede da Localiza.** Ele depende de um serviço interno da
-empresa, acessível apenas com a VPN ativa e com uma chave corporativa. Fora
-desse contexto ele não funciona, e não há como contornar do lado do programa.
+**O Explorador precisa de VPN e de chave corporativa.** Ele depende de um serviço
+de IA interno da Localiza. Na prática isso significa duas coisas: você precisa da
+chave `LOCALIZA_LLM_API_KEY` e do **GlobalProtect conectado**. Com a VPN ligada
+ele funciona de qualquer lugar — não é necessário estar no escritório. Sem VPN,
+ele abre normalmente mas nenhuma pergunta é respondida.
+
+Quem não é da Localiza não consegue usar o Explorador, porque não tem como obter
+a chave. O Refinador, esse sim, funciona para qualquer pessoa.
 
 **O Refinador é feito para exportações do Qualtrics.** Ele lê o questionário
 `.qsf` para entender as perguntas. Planilhas de outras ferramentas de pesquisa
@@ -567,4 +636,81 @@ a planilha gerada.
 
 ---
 
-*Guia referente à versão dos programas de julho de 2026.*
+## 10. Para quem administra os repositórios
+
+Esta seção é para quem é dona dos repositórios no GitHub e vai liberar acesso a
+outras pessoas. Quem só quer usar os programas pode parar na seção 9.
+
+### Liberando acesso a uma pessoa
+
+Cada pessoa é autorizada individualmente. Ela precisa ter conta no GitHub
+(gratuita) e informar o nome de usuário.
+
+Links diretos para a tela de permissões:
+
+- https://github.com/lailarebelos/Refinador/settings/access
+- https://github.com/lailarebelos/Explorador/settings/access
+
+Na tela:
+
+1. Clique em `Add people`.
+2. Digite o usuário do GitHub (ou o e-mail da conta) da pessoa.
+3. Escolha o nível **`Read`** — permite baixar, não permite alterar. É o
+   suficiente para usar os programas.
+4. Confirme.
+
+A pessoa recebe um convite por e-mail e **precisa aceitar**. Até aceitar, o link
+continua devolvendo "404" para ela. Convites não aceitos ficam listados na mesma
+tela e podem ser reenviados ou cancelados.
+
+> Avise a pessoa que o "404" é normal antes de aceitar o convite — sem esse aviso
+> ela vai achar que o link está errado.
+
+### Sobre "quem tem o link pode baixar"
+
+O GitHub não tem esse meio-termo. São só duas opções:
+
+| Modo | Quem vê | Quem pode alterar |
+|---|---|---|
+| **Privado** (atual) | só quem você convida | só você |
+| **Público** | qualquer pessoa na internet, e aparece em buscas | só você |
+
+Repare que **em nenhum dos dois casos alguém consegue alterar seu código.** Quem
+baixa recebe uma cópia; o original só muda com permissão de escrita. A diferença
+entre privado e público é apenas quem consegue ver.
+
+Os repositórios estão privados de propósito: o Refinador embute os arquivos de
+marca da Localiza, e o Explorador contém o endereço de um serviço interno da
+empresa. Nenhum dos dois deveria ficar visível na internet aberta sem antes
+remover essas partes.
+
+### Distribuindo sem exigir conta no GitHub
+
+Se a ideia é simplesmente "mando um link e a pessoa baixa", o caminho mais
+prático dentro da Localiza não é o GitHub, e sim o **OneDrive ou SharePoint**:
+
+1. Baixe o ZIP do repositório (`Code` → `Download ZIP`).
+2. Coloque o ZIP numa pasta do seu OneDrive corporativo.
+3. Clique com o botão direito → `Compartilhar`.
+4. Ajuste a permissão para **"Pode visualizar"** (não "Pode editar").
+5. Copie o link e envie.
+
+Assim a pessoa baixa direto, sem conta no GitHub e sem convite, e o link fica
+sob as regras de segurança da empresa. O GitHub continua sendo o lugar oficial do
+código; o OneDrive é só o meio de entrega.
+
+> Ao distribuir por ZIP, confira que o arquivo `.env` **não** está dentro dele.
+> Ele contém chaves de API pessoais. Os ZIPs baixados do GitHub já vêm sem esse
+> arquivo — mas um ZIP que você mesma compacte a partir da sua pasta de trabalho
+> vai incluí-lo.
+
+### Publicando atualizações
+
+Quando o código mudar, quem já baixou não recebe a atualização automaticamente —
+precisa baixar de novo. Vale avisar as pessoas quando sair uma versão relevante,
+e sugerir que guardem as planilhas de trabalho fora da pasta do programa, para
+não perderem nada ao substituir.
+
+---
+
+*Guia referente à versão dos programas de agosto de 2026.*
