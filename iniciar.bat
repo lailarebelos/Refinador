@@ -4,42 +4,37 @@ chcp 65001 >nul
 
 echo.
 echo ========================================================
-echo      Qualtrics Normalizer - Iniciando...
+echo      Refinador - Iniciando...
 echo ========================================================
 echo.
 echo   Pasta: %~dp0
 echo.
 
-if not exist "venv\Scripts\activate.bat" (
-    echo ERRO: Ambiente virtual nao encontrado.
+if not exist "venv\Scripts\python.exe" (
+    echo ERRO: Ambiente virtual nao encontrado ou incompleto.
     echo Execute "instalar.bat" primeiro.
     echo.
     pause
     exit /b 1
 )
 
-echo   Ativando ambiente virtual...
-call "venv\Scripts\activate.bat"
-
-echo   Verificando Streamlit...
-where streamlit >nul 2>&1
-if errorlevel 1 (
-    echo ERRO: Streamlit nao encontrado.
-    echo Execute "instalar.bat" novamente.
+if not exist "frontend\node_modules" (
+    echo ERRO: Dependencias do frontend nao instaladas.
+    echo Execute "npm install" dentro da pasta frontend.
     echo.
     pause
     exit /b 1
 )
 
-echo   Tudo certo. O navegador vai abrir em instantes.
-echo   Para encerrar, feche esta janela.
-echo.
+echo   Iniciando backend (FastAPI, porta 8000)...
+start "Refinador - Backend" cmd /k ""%~dp0venv\Scripts\python.exe" -m uvicorn backend.api:app --port 8000"
 
-streamlit run "app.py" --server.headless=true --browser.gatherUsageStats=false
+echo   Iniciando frontend (React/Vite)...
+start "Refinador - Frontend" cmd /k "cd /d "%~dp0frontend" && npm run dev"
 
 echo.
-echo ========================================================
-echo   O aplicativo foi encerrado.
-echo ========================================================
+echo   Tudo certo. Abra o endereco que o Vite mostrar na
+echo   janela "Refinador - Frontend" (ex.: http://localhost:5173).
+echo   Para encerrar, feche as duas janelas abertas.
 echo.
 pause

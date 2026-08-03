@@ -1,0 +1,1619 @@
+/* =============================================================================
+   wizard.css — Componentes do wizard de 4 etapas
+   Todas as cores vêm de tokens.css. Nenhum hex cru exceto os
+   translúcidos sobre fundo escuro especificados na spec.
+============================================================================= */
+
+/* ── Transições de tema para elementos do wizard ───────────────────────────── */
+.upload-step,
+.dropzone,
+.file-chip,
+.error-banner,
+.section-title,
+.step-instruction {
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+/* ── Hero (§9.1) ────────────────────────────────────────────────────────────
+   Gradiente: verde-escuro → verde-bandeira (135°)
+   Canto único: top-left = 4px (eco do "L" para o Hero, §7.1)
+   Fundo escuro → cítrico permitido como texto (contraste passa WCAG)
+============================================================================= */
+.hero-card {
+  background: linear-gradient(135deg, var(--brand-verde-escuro) 0%, var(--brand-verde-bandeira) 100%);
+  border-radius: 4px 16px 16px 16px; /* canto sup-esq = 4px: eco do "L" no Hero (§7.1) */
+  padding: 28px 32px;
+  color: #ffffff;
+  box-shadow: var(--lds-shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  animation: fade-in-up 240ms ease both;
+}
+
+.hero-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.hero-title {
+  font-size: var(--lds-font-size-3xl); /* 28px */
+  font-weight: var(--lds-font-weight-medium); /* 500 — peso base da frase */
+  line-height: var(--lds-line-height-snug);
+  color: #ffffff;
+}
+
+/* Verde Cítrico como texto — permitido aqui pois o fundo é escuro (passa WCAG) */
+.hero-accent {
+  color: var(--brand-verde-citrico);
+  font-weight: var(--lds-font-weight-bold); /* 700 — destaque por peso+cor */
+}
+
+.hero-subtitle {
+  font-size: var(--lds-font-size-base); /* 15px */
+  color: rgba(255, 255, 255, 0.85);
+  line-height: var(--lds-line-height-base);
+  margin-top: 10px;
+  max-width: 54ch;
+}
+
+/* Ícones de fluxo .qsf → .xlsx (decorativos, à direita, discretos) */
+.hero-flow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.40);
+  flex-shrink: 0;
+}
+
+.hero-flow-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--lds-font-size-xs); /* 12px */
+  font-weight: var(--lds-font-weight-semibold);
+  letter-spacing: .04em;
+}
+
+.hero-flow-arrow {
+  color: rgba(255, 255, 255, 0.28);
+}
+
+/* Em telas pequenas, ocultar os ícones para não comprimir o título */
+@media (max-width: 640px) {
+  .hero-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px 20px;
+  }
+
+  .hero-flow {
+    align-self: flex-end;
+  }
+}
+
+/* ── Dropzone (§9.2) ────────────────────────────────────────────────────────
+   Componente reutilizável para .qsf e .xlsx.
+   Estados: vazio · hover/foco · drag-over
+============================================================================= */
+
+/* Wrapper da coluna (cabeçalho + zona de drop) */
+.dropzone-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Cabeçalho da coluna: ícone-tipo + título + chip de extensão */
+.dropzone-col-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--lds-color-neutral-foreground-default);
+}
+
+.dropzone-col-title {
+  font-size: var(--lds-font-size-base); /* 15px */
+  font-weight: var(--lds-font-weight-semibold); /* 600 */
+}
+
+/* Chip de extensão: pílula verde-tint */
+.dropzone-ext-chip {
+  background: var(--brand-verde-tint);
+  color: var(--brand-verde-escuro); /* #003418 — passa WCAG sobre o tint claro */
+  border-radius: var(--lds-border-radius-pill);
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: var(--lds-font-weight-semibold);
+  letter-spacing: .02em;
+  line-height: 1.6;
+}
+
+/* Dark mode: tint translúcido cítrico + texto legível */
+[data-theme="dark"] .dropzone-ext-chip {
+  color: #BBF49A;
+}
+
+/* Zona de drop — estado vazio */
+.dropzone {
+  border: 2px dashed var(--brand-verde-bandeira);
+  background: var(--lds-color-accent-primary-subtle);
+  border-radius: var(--lds-border-radius-soft); /* 16px */
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  cursor: pointer;
+  outline: none;
+  transition: background 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+  user-select: none;
+}
+
+/* Hover e foco — leve elevação */
+.dropzone:hover,
+.dropzone:focus-visible {
+  box-shadow: var(--lds-shadow-sm);
+}
+
+/* Anel de foco (§7.3) */
+.dropzone:focus-visible {
+  outline: 2px solid var(--brand-verde-bandeira);
+  outline-offset: 2px;
+}
+[data-theme="dark"] .dropzone:focus-visible {
+  outline-color: var(--brand-verde-citrico);
+}
+
+/* Drag-over: fundo cítrico translúcido + borda sólida */
+.dropzone.drag-over {
+  background: rgba(120, 222, 31, 0.12);
+  border-style: solid;
+  border-color: var(--brand-verde-bandeira);
+  box-shadow: var(--lds-shadow-sm);
+}
+
+/* Ícone de upload — 40px, verde-bandeira */
+.dropzone-upload-icon {
+  color: var(--brand-verde-bandeira);
+  flex-shrink: 0;
+}
+
+/* Texto principal (15px) */
+.dropzone-text-primary {
+  font-size: var(--lds-font-size-base);
+  color: var(--lds-color-neutral-foreground-default);
+  line-height: var(--lds-line-height-snug);
+}
+
+.dropzone-text-emphasis {
+  font-weight: var(--lds-font-weight-semibold); /* 600 */
+}
+
+/* Hint de formato (13px, foreground-minimal) */
+.dropzone-text-hint {
+  font-size: var(--lds-font-size-sm); /* 13px */
+  color: var(--lds-color-neutral-foreground-minimal);
+  line-height: var(--lds-line-height-snug);
+}
+
+/* ── UploadStep — layout da Etapa 1 ─────────────────────────────────────────
+   Hero + cabeçalho de seção + grid de duas dropzones
+============================================================================= */
+.upload-step {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Cabeçalho de seção: micro-label + título + instrução */
+.step-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Micro-label "ETAPA 1 — UPLOAD" (§3) */
+.step-micro-label {
+  font-size: 11px;
+  font-weight: var(--lds-font-weight-semibold);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--lds-color-neutral-foreground-low);
+  line-height: var(--lds-line-height-tight);
+}
+
+/* Título de seção — 22px/600 */
+.step-section-title {
+  font-size: var(--lds-font-size-2xl); /* 22px */
+  font-weight: var(--lds-font-weight-semibold);
+  color: var(--lds-color-neutral-foreground-default);
+  line-height: var(--lds-line-height-snug);
+  margin-top: 2px;
+}
+
+/* Instrução — 15px, foreground-low */
+.step-instruction {
+  font-size: var(--lds-font-size-base); /* 15px */
+  color: var(--lds-color-neutral-foreground-low);
+  line-height: var(--lds-line-height-base);
+  margin-top: 4px;
+  max-width: 64ch;
+}
+
+/* Grid de duas dropzones lado a lado */
+.dropzone-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Mobile: empilha verticalmente */
+@media (max-width: 640px) {
+  .dropzone-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Banner de erro reutilizável (ClassificationStep, etc.) ─────────────── */
+.step-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: color-mix(in srgb, #e53e3e 8%, transparent);
+  border: 1px solid color-mix(in srgb, #e53e3e 22%, transparent);
+  border-radius: var(--lds-border-radius-sm);
+  font-size: var(--lds-font-size-sm);
+  color: #c53030;
+  animation: fade-in-up 160ms ease both;
+}
+
+[data-theme="dark"] .step-error-banner {
+  background: color-mix(in srgb, #fc8181 10%, transparent);
+  border-color: color-mix(in srgb, #fc8181 18%, transparent);
+  color: #fc8181;
+}
+
+.step-error-banner > span {
+  flex: 1;
+}
+
+.step-error-dismiss {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 2px;
+  color: inherit;
+  opacity: 0.6;
+  cursor: pointer;
+  border-radius: 4px;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.step-error-dismiss:hover { opacity: 1; }
+.step-error-dismiss:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  border-radius: var(--lds-border-radius-sm);
+}
+
+/* ── Etapa 2 — Classificação ─────────────────────────────────────────────── */
+.classification-step {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Grid de 4 stat cards */
+.stat-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .stat-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Card individual — canto sup-dir = 4px (eco do "L", §7.1) */
+.stat-card {
+  background: var(--lds-color-neutral-surface-default);
+  border: 1px solid var(--lds-color-neutral-border-low);
+  border-radius: 16px 4px 16px 16px;
+  padding: 20px;
+  box-shadow: var(--lds-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+/* Destaque cítrico — sombra-carimbo (§7.7) — só quando to_review > 0 */
+.stat-card--highlight {
+  /* Verde Cítrico (#78DE1F) NUNCA como color: de texto sobre fundo claro */
+  box-shadow: 4px 4px 0 var(--brand-verde-citrico);
+}
+
+.stat-card-label {
+  font-size: 11px;
+  font-weight: var(--lds-font-weight-semibold);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--lds-color-neutral-foreground-low);
+  line-height: var(--lds-line-height-tight);
+}
+
+.stat-card-number {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--brand-verde-bandeira);
+}
+
+[data-theme="dark"] .stat-card-number {
+  color: var(--lds-color-accent-primary-default); /* #4FC27D */
+}
+
+/* Filtros — pílulas de rádio */
+.filter-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-pills-label {
+  font-size: var(--lds-font-size-sm); /* 13px */
+  color: var(--lds-color-neutral-foreground-low);
+  flex-shrink: 0;
+}
+
+.filter-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  border-radius: var(--lds-border-radius-pill);
+  padding: 6px 14px;
+  font-size: var(--lds-font-size-sm); /* 13px */
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid var(--lds-color-neutral-border-default);
+  background: transparent;
+  color: var(--lds-color-neutral-foreground-low);
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+  outline: none;
+}
+
+/* Hover com tint verde — surface-low é idêntico ao fundo da página no light, sem contraste */
+.filter-pill:hover {
+  background: var(--lds-color-accent-primary-subtle);
+  border-color: rgba(1, 132, 68, 0.30);
+}
+
+.filter-pill:focus-visible {
+  outline: 2px solid var(--brand-verde-bandeira);
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] .filter-pill:focus-visible {
+  outline-color: var(--brand-verde-citrico);
+}
+
+/* Ativo — fundo tint verde + texto escuro */
+.filter-pill--active {
+  background: var(--brand-verde-tint);
+  border-color: transparent;
+  color: var(--brand-verde-escuro);
+  font-weight: var(--lds-font-weight-semibold);
+}
+
+/* Ativo + hover: tint ligeiramente mais saturado, mantém texto escuro */
+.filter-pill--active:hover {
+  background: #C5F086;
+  border-color: transparent;
+  color: var(--brand-verde-escuro);
+}
+
+[data-theme="dark"] .filter-pill--active {
+  background: var(--lds-color-accent-primary-tint);
+  color: #BBF49A;
+}
+
+/* Dark: hover — verde-bandeira translúcido (não 4FC27D, que é cor de texto) */
+[data-theme="dark"] .filter-pill:hover {
+  background: rgba(1, 132, 68, 0.18);
+  border-color: rgba(1, 132, 68, 0.35);
+}
+
+[data-theme="dark"] .filter-pill--active:hover {
+  background: rgba(120, 222, 31, 0.30);
+  border-color: transparent;
+}
+
+/* ── Tabela de classificação de colunas (Etapa 2) ────────────────────────── */
+
+/* Container externo: card com canto sup-dir = 4px (eco do "L", §7.1) */
+.col-table-wrap {
+  background: var(--lds-color-neutral-surface-default);
+  border: 1px solid var(--lds-color-neutral-border-low);
+  border-radius: 16px 4px 16px 16px;
+  overflow: hidden;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+/* Área de rolagem vertical — thead fica sticky dentro desta div */
+.col-table-scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 520px;
+}
+
+/* Tabela propriamente dita */
+.col-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: var(--lds-font-size-md); /* 14px */
+}
+
+/* Cabeçalho sticky */
+.col-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.col-th {
+  background: var(--lds-color-neutral-surface-low);
+  border-bottom: 1px solid var(--lds-color-neutral-border-low);
+  padding: 12px 14px;
+  font-size: var(--lds-font-size-xs); /* 12px */
+  font-weight: var(--lds-font-weight-semibold);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--lds-color-neutral-foreground-low);
+  white-space: nowrap;
+  text-align: left;
+  transition: background 200ms ease;
+}
+
+/* Larguras fixas das colunas */
+.col-th--status  { width: 88px; }
+.col-th--include { width: 68px; text-align: center; }
+.col-th--id      { width: 116px; }
+.col-th--pergunta{ width: auto; min-width: 200px; }
+.col-th--tipo    { width: 132px; }
+.col-th--rotulo  { width: 132px; }
+.col-th--sample  { width: 150px; }
+
+/* Linhas */
+.col-tr {
+  background: var(--lds-color-neutral-surface-default);
+  border-bottom: 1px solid var(--lds-color-neutral-border-low);
+  transition: background 100ms ease;
+}
+
+/* Zebra — linhas ímpares (índice 1, 3, 5…) levemente mais escuras */
+.col-tr--alt {
+  background: var(--lds-color-neutral-surface-low);
+}
+
+.col-tr:hover {
+  background: rgba(1, 132, 68, 0.04);
+}
+
+[data-theme="dark"] .col-tr:hover {
+  background: rgba(120, 222, 31, 0.06);
+}
+
+.col-tr:last-child {
+  border-bottom: none;
+}
+
+/* Células */
+.col-td {
+  padding: 10px 14px;
+  color: var(--lds-color-neutral-foreground-default);
+  vertical-align: middle;
+}
+
+.col-td--include {
+  text-align: center;
+}
+
+/* Texto de ID — monoespaçado e discreto */
+.col-id-text {
+  font-family: var(--lds-font-family-mono, monospace);
+  font-size: var(--lds-font-size-xs);
+  color: var(--lds-color-neutral-foreground-low);
+}
+
+/* Pergunta truncada */
+.col-pergunta-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Amostras truncadas */
+.col-sample-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: var(--lds-font-size-sm); /* 13px */
+  color: var(--lds-color-neutral-foreground-low);
+}
+
+/* ── Mini-badge de Status ─────────────────────────────────────────────────── */
+.status-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: var(--lds-border-radius-pill);
+  font-size: var(--lds-font-size-xs); /* 12px */
+  font-weight: var(--lds-font-weight-semibold);
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
+/* OK — fundo verde suave */
+.status-badge--ok {
+  background: #D1F5DC;
+  color: #003827;
+}
+
+/* Revisar — fundo amarelo */
+.status-badge--review {
+  background: #FBE437;
+  color: #003418;
+}
+
+/* Dark mode */
+[data-theme="dark"] .status-badge--ok {
+  background: rgba(1, 132, 68, 0.22);
+  color: #4FC27D;
+}
+
+[data-theme="dark"] .status-badge--review {
+  background: rgba(251, 228, 55, 0.18);
+  color: #FBE437;
+}
+
+/* ── Checkbox visual (somente-leitura por agora) ─────────────────────────── */
+.col-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--lds-color-neutral-border-default);
+  border-radius: 4px;
+  background: transparent;
+  color: transparent;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+  flex-shrink: 0;
+}
+
+.col-checkbox--checked {
+  background: var(--brand-verde-bandeira);
+  border-color: var(--brand-verde-bandeira);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .col-checkbox--checked {
+  background: var(--lds-color-accent-primary-default); /* #4FC27D */
+  border-color: var(--lds-color-accent-primary-default);
+}
+
+/* Empty state quando filtro não retorna resultados */
+.col-table-empty {
+  padding: 32px 24px;
+  text-align: center;
+  color: var(--lds-color-neutral-foreground-low);
+  font-size: var(--lds-font-size-sm);
+}
+
+/* ── Checkbox interativo (§7) ─────────────────────────────────────────────── */
+/* Transforma o <button> em checkbox visual sem reset de aparência */
+.col-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--lds-color-neutral-border-default);
+  border-radius: 4px;
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease,
+              box-shadow 150ms ease;
+  flex-shrink: 0;
+}
+
+.col-checkbox:hover {
+  border-color: var(--brand-verde-bandeira);
+}
+
+.col-checkbox:focus-visible {
+  outline: 2px solid var(--brand-verde-bandeira);
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] .col-checkbox:focus-visible {
+  outline-color: var(--brand-verde-citrico);
+}
+
+.col-checkbox--checked {
+  background: var(--brand-verde-bandeira);
+  border-color: var(--brand-verde-bandeira);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .col-checkbox--checked {
+  background: var(--lds-color-accent-primary-default);
+  border-color: var(--lds-color-accent-primary-default);
+}
+
+/* ── Células editáveis — trigger e inputs inline (§9.7) ──────────────────── */
+
+/* Célula editável: padding reduzido para acomodar o trigger */
+.col-td--editable {
+  padding: 6px 14px;
+}
+
+/* Botão invisível que ocupa toda a célula — vira input/select ao clicar */
+.col-editable-trigger {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--lds-border-radius-sm); /* 8px */
+  padding: 5px 8px;
+  cursor: pointer;
+  font-size: var(--lds-font-size-md); /* 14px */
+  font-family: inherit;
+  color: var(--lds-color-neutral-foreground-default);
+  text-align: left;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+
+.col-editable-trigger:hover {
+  border-color: var(--lds-color-neutral-border-default);
+  background: var(--lds-color-neutral-surface-low);
+}
+
+.col-editable-trigger:focus-visible {
+  outline: 2px solid var(--brand-verde-bandeira);
+  outline-offset: 1px;
+  border-color: var(--brand-verde-bandeira);
+}
+
+[data-theme="dark"] .col-editable-trigger:focus-visible {
+  outline-color: var(--brand-verde-citrico);
+  border-color: var(--lds-color-accent-primary-default);
+}
+
+.col-editable-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Chevron decorativo no trigger do Tipo */
+.col-edit-chevron {
+  flex-shrink: 0;
+  color: var(--lds-color-neutral-foreground-minimal);
+  transition: color 120ms ease;
+}
+
+.col-editable-trigger:hover .col-edit-chevron {
+  color: var(--lds-color-neutral-foreground-low);
+}
+
+/* Select inline (§9.7) */
+.col-select {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+  background: var(--lds-color-neutral-surface-default);
+  border: 2px solid var(--brand-verde-bandeira);
+  border-radius: var(--lds-border-radius-sm); /* 8px */
+  padding: 5px 30px 5px 9px; /* dir: espaço para o chevron nativo */
+  font-size: var(--lds-font-size-md);
+  font-family: inherit;
+  color: var(--lds-color-neutral-foreground-default);
+  cursor: pointer;
+  outline: none;
+  /* Chevron nativo do select — será substituído por ícone no futuro se necessário */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236E6E6E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  transition: border-color 120ms ease;
+}
+
+[data-theme="dark"] .col-select {
+  background-color: var(--lds-color-neutral-surface-low);
+  border-color: var(--lds-color-accent-primary-default);
+  color: var(--lds-color-neutral-foreground-default);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239FB3A8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+
+/* Input inline (§9.7) */
+.col-input {
+  display: block;
+  width: 100%;
+  background: var(--lds-color-neutral-surface-default);
+  border: 2px solid var(--brand-verde-bandeira);
+  border-radius: var(--lds-border-radius-sm); /* 8px */
+  padding: 5px 9px;
+  font-size: var(--lds-font-size-md);
+  font-family: inherit;
+  color: var(--lds-color-neutral-foreground-default);
+  outline: none;
+  transition: border-color 120ms ease;
+}
+
+[data-theme="dark"] .col-input {
+  background: var(--lds-color-neutral-surface-low);
+  border-color: var(--lds-color-accent-primary-default);
+  color: var(--lds-color-neutral-foreground-default);
+}
+
+.col-input::placeholder {
+  color: var(--lds-color-neutral-foreground-minimal);
+}
+
+.col-input:focus-visible {
+  outline: 2px solid var(--brand-verde-bandeira);
+  outline-offset: 0;
+}
+[data-theme="dark"] .col-input:focus-visible {
+  outline-color: var(--lds-color-accent-primary-default);
+}
+
+.col-select:focus-visible {
+  outline: 2px solid var(--brand-verde-bandeira);
+  outline-offset: 0;
+}
+[data-theme="dark"] .col-select:focus-visible {
+  outline-color: var(--lds-color-accent-primary-default);
+}
+
+/* ── Accordion (§9.6) ────────────────────────────────────────────────────── */
+.accordion {
+  border: 1px solid var(--lds-color-neutral-border-low);
+  border-radius: var(--lds-border-radius-sm); /* 8px */
+  overflow: hidden;
+  transition: border-color 200ms ease;
+}
+
+.accordion-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--lds-color-neutral-surface-default);
+  border: none;
+  font-size: var(--lds-font-size-md); /* 14px */
+  font-weight: var(--lds-font-weight-medium); /* 500 */
+  font-family: inherit;
+  color: var(--lds-color-neutral-foreground-default);
+  cursor: pointer;
+  text-align: left;
+  transition: background 120ms ease;
+}
+
+.accordion-header:hover {
+  background: var(--lds-color-neutral-surface-low);
+}
+
+.accordion-header:focus-visible {
+  outline: 2px solid var(--brand-verde-bandeira);
+  outline-offset: -2px;
+}
+
+[data-theme="dark"] .accordion-header:focus-visible {
+  outline-color: var(--brand-verde-citrico);
+}
+
+/* Chevron: rotaciona 180° quando aberto */
+.accordion-chevron {
+  flex-shrink: 0;
+  color: var(--lds-color-neutral-foreground-low);
+  transition: transform 200ms ease;
+}
+
+.accordion-chevron--open {
+  transform: rotate(180deg);
+}
+
+.accordion-count {
+  margin-left: auto;
+  font-size: var(--lds-font-size-xs); /* 12px */
+  color: var(--lds-color-neutral-foreground-minimal);
+  font-weight: 400;
+}
+
+/* Corpo do accordion */
+.accordion-body {
+  border-top: 1px solid var(--lds-color-neutral-border-low);
+  padding: 12px 14px;
+  background: var(--lds-color-neutral-surface-default);
+  transition: background 200ms ease;
+}
+
+/* Lista de enunciados */
+.accordion-question-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.accordion-question-item {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.accordion-question-id {
+  font-family: var(--lds-font-family-mono, monospace);
+  font-size: var(--lds-font-size-xs); /* 12px */
+  color: var(--lds-color-neutral-foreground-low);
+  flex-shrink: 0;
+}
+
+.accordion-question-text {
+  font-size: var(--lds-font-size-sm); /* 13px */
+  color: var(--lds-color-neutral-foreground-default);
+  line-height: var(--lds-line-height-base);
+  margin: 0;
+}
+
+/* ── Botão primário (§7.11) ───────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 24px;
+  height: 46px;
+  background: var(--brand-verde-bandeira);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--lds-border-radius-sm); /* 8px */
+  font-size: var(--lds-font-size-md); /* 14px */
+  font-weight: var(--lds-font-weight-semibold); /* 600 */
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 150ms ease, opacity 150ms ease;
+}
+
+.btn-primary:hover {
+  background: var(--brand-verde-escuro);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--brand-verde-bandeira);
+  outline-offset: 3px;
+}
+
+[data-theme="dark"] .btn-primary:focus-visible {
+  outline-color: var(--brand-verde-citrico);
+}
+
+.btn-primary:disabled {
+  background: var(--lds-color-neutral-surface-mid);
+  color: var(--lds-color-neutral-foreground-minimal);
+  cursor: not-allowed;
+}
+
+/* Linha que posiciona o CTA à direita */
+.step-cta-row {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+/* Placeholder */
+.placeholder-step {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 0;
+}
+
+/* ── Etapa 3 — Respostas abertas ─────────────────────────────────────────── */
+.opentext-step {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* "(opcional)" ao lado do título */
+.step-title-optional {
+  font-size: var(--lds-font-size-xl); /* 18px */
+  font-weight: var(--lds-font-weight-regular);
+  color: var(--lds-color-neutral-foreground-low);
+  margin-left: 6px;
+}
+
+/* Estados de loading/erro/vazio */
+.opentext-loading,
+.opentext-error,
+.opentext-empty {
+  font-size: var(--lds-font-size-sm);
+  padding: 12px 0;
+  color: var(--lds-color-neutral-foreground-low);
+}
+.opentext-error { color: #c53030; }
+[data-theme="dark"] .opentext-error { color: #fc8181; }
+
+/* ── Multiselect (§9.5/§9.7) ─────────────────────────────────────────────── */
+.multiselect-field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.multiselect-label {
+  font-size: var(--lds-font-size-sm); /* 13px */
+  font-weight: var(--lds-font-weight-semibold);
+  color: var(--lds-color-neutral-foreground-default);
+}
+
+/* Campo principal: moldura §9.7 */
+.multiselect-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 10px 6px 12px;
+  background: var(--lds-color-neutral-surface-default);
+  border: 1px solid var(--lds-color-neutral-border-default);
+  border-radius: var(--lds-border-radius-sm); /* 8px */
+  cursor: pointer;
+  transition: border-color 120ms ease, background 120ms ease;
+  outline: none;
+}
+
+.multiselect-field:hover {
+  border-color: var(--brand-verde-bandeira);
+}
+
+.multiselect-field--open,
+.multiselect-field:focus-visible {
+  border-width: 2px;
+  border-color: var(--brand-verde-bandeira);
+  padding: 5px 9px 5px 11px; /* compensa 1px do border-width */
+}
+
+[data-theme="dark"] .multiselect-field--open,
+[data-theme="dark"] .multiselect-field:focus-visible {
+  border-color: var(--lds-color-accent-primary-default);
+}
+
+/* Área de chips + placeholder */
+.multiselect-chips {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+}
+
+.multiselect-placeholder {
+  font-size: var(--lds-font-size-md);
+  color: var(--lds-color-neutral-foreground-minimal);
+}
+
+/* Chip selecionado (§9.5) */
+.multiselect-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--brand-verde-tint);
+  color: var(--brand-verde-escuro);
+  border-radius: var(--lds-border-radius-pill);
+  padding: 2px 6px 2px 8px;
+  font-size: var(--lds-font-size-xs); /* 12px */
+  font-weight: var(--lds-font-weight-medium);
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+[data-theme="dark"] .multiselect-chip {
+  background: var(--lds-color-accent-primary-tint);
+  color: #BBF49A;
+}
+
+.multiselect-chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.multiselect-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+.multiselect-chip-remove:hover { opacity: 1; }
+.multiselect-chip-remove:focus-visible {
+  outline: 2px solid var(--brand-verde-bandeira);
+  outline-offset: 1px;
+}
+[data-theme="dark"] .multiselect-chip-remove:focus-visible {
+  outline-color: var(--brand-verde-citrico);
+}
+
+/* Chevron do campo */
+.multiselect-chevron {
+  flex-shrink: 0;
+  color: var(--lds-color-neutral-foreground-low);
+  transition: transform 200ms ease;
+}
+.multiselect-chevron--open { transform: rotate(180deg); }
+
+/* Menu flutuante (§9.7) */
+.multiselect-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--lds-color-neutral-surface-low);
+  border: 1px solid var(--lds-color-neutral-border-low);
+  border-radius: 10px;
+  box-shadow: var(--lds-shadow-lg);
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+/* Opção no menu */
+.multiselect-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 100ms ease;
+}
+.multiselect-option:hover {
+  background: var(--lds-color-neutral-surface-mid);
+}
+.multiselect-option--selected {
+  background: color-mix(in srgb, var(--brand-verde-bandeira) 6%, transparent);
+}
+
+/* Checkbox visual da opção */
+.multiselect-option-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.multiselect-option-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border: 2px solid var(--lds-color-neutral-border-default);
+  border-radius: 4px;
+  background: transparent;
+  color: transparent;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+.multiselect-option-check--checked {
+  background: var(--brand-verde-bandeira);
+  border-color: var(--brand-verde-bandeira);
+  color: #ffffff;
+}
+[data-theme="dark"] .multiselect-option-check--checked {
+  background: var(--lds-color-accent-primary-default);
+  border-color: var(--lds-color-accent-primary-default);
+}
+
+/* Corpo da opção: ID + texto */
+.multiselect-option-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.multiselect-option-id {
+  font-family: var(--lds-font-family-mono, monospace);
+  font-size: 11px;
+  color: var(--lds-color-neutral-foreground-low);
+  line-height: 1.3;
+}
+.multiselect-option-text {
+  font-size: var(--lds-font-size-sm); /* 13px */
+  color: var(--lds-color-neutral-foreground-default);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Badge "Elegível" na opção */
+.multiselect-option-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: var(--lds-font-weight-semibold);
+  padding: 2px 6px;
+  border-radius: var(--lds-border-radius-pill);
+  background: #D1F5DC;
+  color: #003827;
+}
+[data-theme="dark"] .multiselect-option-badge {
+  background: rgba(1, 132, 68, 0.22);
+  color: #4FC27D;
+}
+
+/* ── Lista de elegibilidade (accordion 2) ───────────────────────────────── */
+.eligibility-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.eligibility-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--lds-color-neutral-border-low);
+}
+.eligibility-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+.eligibility-row-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.eligibility-score {
+  font-size: 11px;
+  color: var(--lds-color-neutral-foreground-minimal);
+  margin-left: auto;
+}
+
+.eligibility-question {
+  font-size: var(--lds-font-size-sm); /* 13px */
+  color: var(--lds-color-neutral-foreground-default);
+  line-height: var(--lds-line-height-snug);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eligibility-summary {
+  font-size: var(--lds-font-size-xs); /* 12px */
+  color: var(--lds-color-neutral-foreground-low);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Texto do accordion de análise */
+.accordion-analysis-text {
+  font-size: var(--lds-font-size-sm); /* 13px */
+  color: var(--lds-color-neutral-foreground-default);
+  line-height: var(--lds-line-height-base);
+  margin: 0;
+  max-width: 72ch;
+}
+
+/* ── Etapa 4 — Exportar ──────────────────────────────────────────────────── */
+.export-step {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Wrapper do botão principal + faixa de erro */
+.export-cta-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Variante larga do botão primário (§7.11) */
+.btn-primary--wide {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Spinner de loading — ponto cítrico pulsando */
+.export-spinner {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: var(--brand-verde-citrico);
+  animation: export-pulse 900ms ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes export-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* Faixa de erro */
+.export-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: color-mix(in srgb, #e53e3e 8%, transparent);
+  border: 1px solid color-mix(in srgb, #e53e3e 25%, transparent);
+  border-radius: var(--lds-border-radius-sm);
+  font-size: var(--lds-font-size-sm);
+  color: #c53030;
+}
+
+[data-theme="dark"] .export-error-banner {
+  background: color-mix(in srgb, #fc8181 10%, transparent);
+  border-color: color-mix(in srgb, #fc8181 20%, transparent);
+  color: #fc8181;
+}
+
+.export-retry-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: var(--lds-border-radius-sm);
+  padding: 4px 10px;
+  font-size: var(--lds-font-size-xs);
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-left: auto;
+}
+.export-retry-btn:hover { opacity: 0.8; }
+
+/* Card de sucesso — sombra-carimbo cítrica (§7.7, segundo uso) */
+.export-success-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--lds-color-neutral-surface-default);
+  border: 1px solid var(--lds-color-neutral-border-low);
+  border-radius: 16px 4px 16px 16px; /* canto sup-dir = 4px, eco do "L" */
+  box-shadow: 4px 4px 0 var(--brand-verde-citrico); /* carimbo cítrico */
+  transition: background 200ms ease;
+}
+
+.export-success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  background: #D1F5DC;
+  color: var(--brand-verde-bandeira);
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .export-success-icon {
+  background: rgba(1, 132, 68, 0.22);
+  color: var(--lds-color-accent-primary-default);
+}
+
+.export-success-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.export-success-title {
+  font-size: var(--lds-font-size-base); /* 15px */
+  font-weight: var(--lds-font-weight-semibold);
+  color: var(--lds-color-neutral-foreground-default);
+  line-height: var(--lds-line-height-tight);
+}
+
+.export-success-sub {
+  font-size: var(--lds-font-size-sm);
+  color: var(--lds-color-neutral-foreground-low);
+  line-height: var(--lds-line-height-snug);
+}
+
+.export-success-sub strong {
+  font-weight: var(--lds-font-weight-semibold);
+  color: var(--lds-color-neutral-foreground-default);
+}
+
+/* Grid de 2 colunas para os stat cards da exportação */
+.stat-cards-grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Lista de headers no accordion */
+.export-headers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.export-header-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--lds-color-neutral-border-low);
+  font-size: var(--lds-font-size-sm);
+}
+
+.export-header-item:last-child { border-bottom: none; }
+
+.export-header-index {
+  min-width: 28px;
+  font-size: 11px;
+  color: var(--lds-color-neutral-foreground-minimal);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.export-header-name {
+  font-family: var(--lds-font-family-mono, monospace);
+  font-size: var(--lds-font-size-xs); /* 12px */
+  color: var(--lds-color-neutral-foreground-default);
+  word-break: break-all;
+}
+
+/* ── Chip de arquivo selecionado ──────────────────────────────────────────── */
+.dropzone--filled {
+  cursor: default;
+  border-style: solid;
+  border-color: var(--brand-verde-bandeira);
+  background: var(--lds-color-accent-primary-subtle);
+}
+.dropzone--filled:hover,
+.dropzone--filled:focus-visible {
+  box-shadow: none;
+}
+
+.dropzone-filename {
+  word-break: break-all;
+}
+
+.dropzone-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 4px 12px;
+  border: 1px solid var(--lds-color-neutral-border-default);
+  border-radius: var(--lds-border-radius-pill);
+  background: transparent;
+  color: var(--lds-color-neutral-foreground-low);
+  font-size: var(--lds-font-size-sm);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+.dropzone-remove-btn:hover {
+  background: var(--lds-color-neutral-surface-hover);
+  color: var(--lds-color-neutral-foreground-default);
+}
+
+/* ── Status de upload (loading / erro) ───────────────────────────────────── */
+.upload-status {
+  font-size: var(--lds-font-size-sm);
+  padding: 10px 14px;
+  border-radius: var(--lds-border-radius-soft);
+  line-height: var(--lds-line-height-snug);
+}
+.upload-status--loading {
+  background: var(--lds-color-accent-primary-subtle);
+  color: var(--lds-color-neutral-foreground-low);
+}
+.upload-status--success {
+  background: color-mix(in srgb, var(--brand-verde-bandeira) 10%, transparent);
+  color: var(--brand-verde-escuro);
+}
+[data-theme="dark"] .upload-status--success {
+  color: #BBF49A;
+}
+.upload-status--error {
+  background: color-mix(in srgb, #e53e3e 8%, transparent);
+  color: #c53030;
+}
+[data-theme="dark"] .upload-status--error {
+  background: color-mix(in srgb, #fc8181 10%, transparent);
+  color: #fc8181;
+}
+
+/* ── Card de carregamento na Etapa 1 (mesma linguagem do export-spinner) ────── */
+.upload-processing-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 32px 24px;
+  background: var(--lds-color-accent-primary-subtle);
+  border: 1px solid rgba(1, 132, 68, 0.15);
+  border-radius: var(--lds-border-radius-soft);
+  text-align: center;
+  animation: fade-in-up 200ms ease both;
+}
+
+[data-theme="dark"] .upload-processing-card {
+  background: rgba(1, 132, 68, 0.10);
+  border-color: rgba(79, 194, 125, 0.18);
+}
+
+.upload-processing-dots {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+/* Reutiliza a keyframe export-pulse já definida acima */
+.upload-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: var(--brand-verde-citrico);
+  animation: export-pulse 900ms ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.upload-processing-label {
+  font-size: var(--lds-font-size-base);
+  font-weight: var(--lds-font-weight-semibold);
+  color: var(--lds-color-neutral-foreground-default);
+  line-height: var(--lds-line-height-tight);
+}
+
+.upload-processing-sub {
+  font-size: var(--lds-font-size-sm);
+  color: var(--lds-color-neutral-foreground-low);
+  margin-top: -6px;
+}
+
+@keyframes shimmer-slide {
+  0%   { background-position:  200% center; }
+  100% { background-position: -200% center; }
+}
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--lds-color-neutral-foreground-low)     0%,
+    var(--lds-color-neutral-foreground-default) 46%,
+    #AAAAAA                                     50%,
+    var(--lds-color-neutral-foreground-default) 54%,
+    var(--lds-color-neutral-foreground-low)     100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-slide 2s linear infinite;
+}
+[data-theme="dark"] .text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--lds-color-neutral-foreground-low)    0%,
+    var(--lds-color-neutral-foreground-muted)  46%,
+    #AAAAAA                                    50%,
+    var(--lds-color-neutral-foreground-muted)  54%,
+    var(--lds-color-neutral-foreground-low)    100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Botão ghost (§7.11) ────────────────────────────────────────────────────── */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 16px;
+  height: 46px;
+  background: transparent;
+  color: var(--lds-color-neutral-foreground-low);
+  border: none;
+  border-radius: var(--lds-border-radius-sm);
+  font-size: var(--lds-font-size-md);
+  font-weight: var(--lds-font-weight-medium);
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.btn-ghost:hover {
+  background: var(--lds-color-neutral-surface-low);
+  color: var(--lds-color-neutral-foreground-default);
+}
+
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--brand-verde-bandeira);
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] .btn-ghost:focus-visible {
+  outline-color: var(--brand-verde-citrico);
+}
+
+.btn-ghost:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── CTA row com Voltar à esquerda + ação à direita ─────────────────────────── */
+.step-cta-row--with-back {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+
+/* ── "Normalizar outro arquivo" — rodapé pós-download ──────────────────────── */
+.export-restart-row {
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+  border-top: 1px solid var(--lds-color-neutral-border-low);
+  margin-top: 4px;
+}

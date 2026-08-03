@@ -23,6 +23,7 @@ from typing import Callable
 # ---------------------------------------------------------------------------
 
 _SENTIMENT_MAP: dict[str, int] = {"negativo": 1, "neutro": 2, "positivo": 3}
+_SENTIMENT_NO_TEXT: int = 0   # linha sem resposta textual
 _DISCOVERY_CATEGORY_COUNT: int = 30
 _FALLBACK_CATEGORIES: list[str] = [
     "atendimento",
@@ -277,8 +278,8 @@ def analyze_columns(
         if non_empty == 0:
             results.append(SentimentCategoryResult(
                 column_id=col_id,
-                sentiment_values=[None] * total,
-                category_values=[None] * total,
+                sentiment_values=[_SENTIMENT_NO_TEXT] * total,
+                category_values=["sem resposta"] * total,
             ))
             continue
 
@@ -313,8 +314,9 @@ def analyze_columns(
             classified_unique.extend(_classify_batch(batch, categories, provider))
 
         # ── Reconstrói vetores na ordem original ─────────────────────────────
-        sentiment_values: list[int | None]  = [None] * total
-        category_values:  list[str | None]  = [None] * total
+        # Linhas sem texto recebem valores explícitos (não ficam vazias)
+        sentiment_values: list[int | None]  = [_SENTIMENT_NO_TEXT] * total
+        category_values:  list[str | None]  = ["sem resposta"] * total
 
         for local_i, orig_i in enumerate(non_empty_indices):
             uid = index_map[local_i]
@@ -322,16 +324,16 @@ def analyze_columns(
                 continue
             r = classified_unique[uid]
 
-            # Sentimento
+            # Sentimento — fallback para neutro se o LLM retornou valor inválido
             sent_raw = (r.get("sentiment") or "").lower().strip()
-            sentiment_values[orig_i] = _SENTIMENT_MAP.get(sent_raw)
+            sentiment_values[orig_i] = _SENTIMENT_MAP.get(sent_raw, 2)
 
-            # Categorias — filtra só as descobertas no Passo A
+            # Categorias — filtra só as descobertas no Passo A; fallback "outros"
             cats = [
                 str(c).strip() for c in (r.get("categories") or [])
                 if str(c).strip() in categories
             ][:3]
-            category_values[orig_i] = ", ".join(cats) if cats else None
+            category_values[orig_i] = ", ".join(cats) if cats else "outros"
 
         # ── Estimativa de custo (Haiku apr. $0.80/Mtok in, $4.00/Mtok out) ──
         tokens_in  = sum(_estimate_tokens(c) for c in unique_comments)

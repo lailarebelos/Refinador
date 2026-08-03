@@ -3,7 +3,7 @@ cd /d "%~dp0"
 chcp 65001 >nul
 echo.
 echo ========================================================
-echo        Qualtrics Normalizer - Instalacao
+echo        Refinador - Instalacao
 echo ========================================================
 echo.
 echo   Pasta: %~dp0

@@ -1,0 +1,199 @@
+/* =============================================================================
+   tokens.css — Fundação visual do Refinador
+   -----------------------------------------------------------------------------
+   Valores extraídos do código REAL e final da linguagem de design Localiza&CO.
+   Esta é a MESMA base de tokens usada por outros apps da família, de modo que
+   produtos diferentes compartilhem identidade. NÃO altere os hex/valores: eles
+   são a fonte de verdade. Componentes devem ler SEMPRE estes tokens, nunca hex
+   cru. Preferir os tokens --lds-* (Design System); os --brand-* (Brand
+   Guidelines) só para os pontos de marca.
+
+   Convenção de cor da marca:
+     Verde Bandeira #018444  -> AÇÃO primária, links, foco (fundo claro)
+     Verde Cítrico  #78DE1F  -> ACENTO apenas (bg/border/shadow/fill). NUNCA texto sobre claro.
+     Verde Escuro   #003418  -> sidebar (claro), hover do primário, texto sobre claro
+     Verde "texto escuro" #4FC27D -> substituto do cítrico quando precisar de "verde como texto" no dark
+============================================================================= */
+
+/* ====================== MODO CLARO (padrão) — :root ======================= */
+:root {
+  /* ---- Acento (LDS) ---- */
+  --lds-color-accent-primary-default: #018444;   /* Verde Bandeira */
+  --lds-color-accent-primary-hover:   #003418;   /* Verde Escuro */
+  --lds-color-accent-primary-active:  #003418;
+  --lds-color-accent-primary-subtle:  rgba(1,132,68,0.08);
+  --lds-color-accent-primary-tint:    #CEFDAF;   /* Verde Tint */
+
+  /* ---- Superfícies / fundos ---- */
+  --lds-color-neutral-background-default: #F2F2F2;  /* área de conteúdo */
+  --lds-color-neutral-background-subtle:  #F2F2F2;  /* app shell */
+  --lds-color-neutral-surface-default:    #FFFFFF;  /* cards */
+  --lds-color-neutral-surface-low:        #F2F2F2;  /* muted */
+  --lds-color-neutral-surface-mid:        #E8E8E8;
+
+  /* ---- Bordas ---- */
+  --lds-color-neutral-border-low:     #E6E6E6;
+  --lds-color-neutral-border-default: #CCCCCC;
+  --lds-color-neutral-border-strong:  #AAAAAA;
+
+  /* ---- Texto ---- */
+  --lds-color-neutral-foreground-default: #4A4A4A;
+  --lds-color-neutral-foreground-muted:   #4A4A4A;  /* = default no claro; diverge no escuro */
+  --lds-color-neutral-foreground-low:     #6E6E6E;
+  --lds-color-neutral-foreground-minimal: #9E9E9E;
+
+  /* ---- Feedback ---- */
+  --lds-color-feedback-error-default:   #D92020;
+  --lds-color-feedback-success-default: #018444;
+  --lds-color-feedback-warning-default: #FBE437;
+  --lds-color-feedback-info-default:    #018444;
+  --lds-color-feedback-error-subtle:    rgba(217,32,32,0.08);
+  --lds-color-feedback-error-bg:        #FFE4E4;
+  --lds-color-feedback-error-border:    #FFD1D1;
+  --lds-color-feedback-error-text:      #720D0D;
+  --lds-color-feedback-warning-bg:      #FBE437;
+  --lds-color-feedback-warning-fg:      #003418;
+  /* extras úteis (sucesso/badges) observados na família */
+  --lds-color-feedback-success-bg:      #D1F5DC;
+  --lds-color-feedback-success-fg:      #003827;
+  --lds-color-feedback-info-bg:         #D8EFFD;
+  --lds-color-feedback-info-fg:         #0B4260;
+  --lds-color-feedback-info-border:     #C0E6FC;
+
+  /* ---- Sombras ---- */
+  --lds-shadow-sm:      0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --lds-shadow-default: 0 1px 3px 0 rgb(0 0 0 / 0.10), 0 1px 2px -1px rgb(0 0 0 / 0.10);
+  --lds-shadow-md:      0 4px 6px -1px rgb(0 0 0 / 0.10), 0 2px 4px -2px rgb(0 0 0 / 0.10);
+  --lds-shadow-lg:      0 10px 15px -3px rgb(0 0 0 / 0.10), 0 4px 6px -4px rgb(0 0 0 / 0.10);
+
+  /* ============== Tokens de marca (brand.css) — modo claro =============== */
+  --brand-verde-bandeira: #018444;
+  --brand-verde-citrico:  #78DE1F;
+  --brand-verde-escuro:   #003418;
+  --brand-verde-tint:     #CEFDAF;
+  --brand-sidebar-bg:     #003418;
+  --brand-danger-fg:           #D92020;
+  --brand-danger-hover-fg:     #B01A1A;
+  --brand-danger-hover-bg:     #FFE4E4;
+  --brand-danger-btn-bg:       #D92020;
+  --brand-danger-btn-bg-hover: #B01A1A;
+
+  /* =================== Tokens de layout e raio ==================== */
+  --lds-sidebar-width-expanded:  280px;
+  --lds-sidebar-width-collapsed: 72px;
+  --lds-header-height:           64px;
+  /* coluna central de conteúdo (renomeado do "chat-max-width" da família) */
+  --lds-content-max-width:       960px;
+
+  /* Raio */
+  --lds-border-radius-sm:   8px;     /* botões de ícone */
+  --lds-border-radius-soft: 16px;    /* cards, modais */
+  --lds-border-radius-xl:   24px;    /* canto arredondado da sidebar */
+  --lds-border-radius-pill: 9999px;  /* badges, marcadores */
+  --lds-border-radius-sharp: 4px;    /* O CANTO ÚNICO REDUZIDO — eco do "L" */
+
+  /* Espaçamento */
+  --lds-spacing-4: 16px;
+  --lds-spacing-5: 20px;
+  --lds-spacing-6: 24px;
+  --lds-spacing-7: 1.75rem;  /* definido (no app-mãe era herança sem token) */
+  --lds-spacing-8: 32px;
+  --lds-spacing-12: 3rem;
+
+  /* Tipografia — escala */
+  --lds-font-family-base: 'Roobert', 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --lds-font-family-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  --lds-font-size-2xs:  0.6875rem; /* 11px — timestamps/labels de lista (era hardcoded no app-mãe) */
+  --lds-font-size-xs:   0.75rem;   /* 12px */
+  --lds-font-size-sm:   0.8125rem; /* 13px — mínimo p/ texto corrido */
+  --lds-font-size-md:   0.875rem;  /* 14px */
+  --lds-font-size-base: 0.9375rem; /* 15px — corpo */
+  --lds-font-size-lg:   1rem;      /* 16px */
+  --lds-font-size-xl:   1.125rem;  /* 18px — título do header */
+  --lds-font-size-2xl:  1.375rem;  /* 22px */
+  --lds-font-size-3xl:  1.75rem;   /* 28px — hero/empty state */
+
+  --lds-font-weight-regular:  400;
+  --lds-font-weight-medium:   500;
+  --lds-font-weight-semibold: 600;
+  --lds-font-weight-bold:     700;
+
+  --lds-line-height-tight:   1.2;
+  --lds-line-height-snug:    1.4;
+  --lds-line-height-base:    1.5;
+  --lds-line-height-relaxed: 1.6;
+}
+
+/* ========================= MODO ESCURO ==========================
+   Verde-quase-preto (mantém a identidade no escuro; não é cinza neutro).
+   O acento de TEXTO #4FC27D foi validado em 7.33:1 sobre #14271C (AA+).
+================================================================== */
+[data-theme="dark"] {
+  /* ---- Acento ---- */
+  --lds-color-accent-primary-default: #4FC27D;   /* verde claro p/ TEXTO no escuro */
+  --lds-color-accent-primary-hover:   #62D891;
+  --lds-color-accent-primary-active:  #62D891;
+  --lds-color-accent-primary-subtle:  rgba(79,194,125,0.15);
+  --lds-color-accent-primary-tint:    rgba(120,222,31,0.14);  /* chip bg */
+
+  /* ---- Superfícies / fundos ---- */
+  --lds-color-neutral-background-default: #0E1F16;  /* área de conteúdo */
+  --lds-color-neutral-background-subtle:  #0A1A11;  /* app shell */
+  --lds-color-neutral-surface-default:    #14271C;  /* cards */
+  --lds-color-neutral-surface-low:        #1B3325;  /* popovers, menus elevados */
+  --lds-color-neutral-surface-mid:        #22402F;
+
+  /* ---- Bordas (translúcidas) ---- */
+  --lds-color-neutral-border-low:     rgba(255,255,255,0.10);
+  --lds-color-neutral-border-default: rgba(255,255,255,0.16);
+  --lds-color-neutral-border-strong:  rgba(255,255,255,0.24);
+
+  /* ---- Texto ---- */
+  --lds-color-neutral-foreground-default: #F2F7F3;
+  --lds-color-neutral-foreground-muted:   #D6E2DA;
+  --lds-color-neutral-foreground-low:     #9FB3A8;
+  --lds-color-neutral-foreground-minimal: #6B8577;
+
+  /* ---- Feedback ---- */
+  --lds-color-feedback-error-default:   #FF6B7A;
+  --lds-color-feedback-error-text:      #FF6B7A;
+  --lds-color-feedback-success-default: #4FC27D;
+  --lds-color-feedback-info-default:    #4FC27D;
+  --lds-color-feedback-error-subtle:    rgba(255,107,122,0.14);
+  --lds-color-feedback-error-bg:        rgba(255,107,122,0.10);
+  --lds-color-feedback-error-border:    rgba(255,107,122,0.30);
+  --lds-color-feedback-warning-bg:      rgba(251,228,55,0.18);
+  --lds-color-feedback-warning-fg:      #F2F7F3;
+  /* extras (derivados análogos p/ sucesso/info no escuro) */
+  --lds-color-feedback-success-bg:      rgba(79,194,125,0.16);
+  --lds-color-feedback-success-fg:      #BFEFCF;
+  --lds-color-feedback-info-bg:         rgba(79,194,125,0.12);
+  --lds-color-feedback-info-fg:         #BCE3FB;
+  --lds-color-feedback-info-border:     rgba(120,222,31,0.20);
+
+  /* ---- Sombras (mais densas no escuro) ---- */
+  --lds-shadow-sm:      0 1px 2px 0 rgb(0 0 0 / 0.30);
+  --lds-shadow-default: 0 1px 3px 0 rgb(0 0 0 / 0.40), 0 1px 2px -1px rgb(0 0 0 / 0.30);
+  --lds-shadow-md:      0 4px 6px -1px rgb(0 0 0 / 0.40), 0 2px 4px -2px rgb(0 0 0 / 0.30);
+  --lds-shadow-lg:      0 10px 15px -3px rgb(0 0 0 / 0.50), 0 4px 6px -4px rgb(0 0 0 / 0.30);
+
+  /* ============== Tokens de marca (brand.css) — overrides escuro ========= */
+  --brand-verde-tint:          rgba(120,222,31,0.14);
+  --brand-sidebar-bg:          #0A1A11;
+  --brand-danger-fg:           #FF6B7A;
+  --brand-danger-hover-fg:     #FF6B7A;
+  --brand-danger-hover-bg:     rgba(255,107,122,0.14);
+  --brand-danger-btn-bg:       #C0392B;
+  --brand-danger-btn-bg-hover: #A93226;
+  /* IMPORTANTE: --brand-verde-bandeira/-citrico/-escuro NÃO têm override no escuro
+     (permanecem #018444 / #78DE1F / #003418). A sidebar usa --brand-sidebar-bg. */
+}
+
+/* ===================== Base global ===================== */
+html, body {
+  background: var(--lds-color-neutral-background-default);
+  color: var(--lds-color-neutral-foreground-default);
+  font-family: var(--lds-font-family-base);
+  font-size: var(--lds-font-size-base); /* 15px */
+  line-height: var(--lds-line-height-base);
+}

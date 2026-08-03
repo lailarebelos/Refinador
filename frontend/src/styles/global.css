@@ -1,0 +1,57 @@
+/* Roobert — @font-face stubs
+   Coloque os arquivos .woff2 em frontend/public/fonts/roobert/
+   enquanto não disponível, a stack cai para Inter (via Google Fonts) */
+@font-face {
+  font-family: 'Roobert';
+  src: url('/fonts/roobert/Roobert-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Roobert';
+  src: url('/fonts/roobert/Roobert-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Roobert';
+  src: url('/fonts/roobert/Roobert-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Roobert';
+  src: url('/fonts/roobert/Roobert-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Foco visível global — anel de 2px verde para qualquer elemento interativo não coberto pelas regras específicas */
+:focus-visible {
+  outline: 2px solid var(--brand-verde-bandeira);
+  outline-offset: 2px;
+}
+[data-theme="dark"] :focus-visible {
+  outline-color: var(--brand-verde-citrico);
+}
+
+/* Sidebar não transiciona entre temas — muda instantaneamente (spec §8) */
+[data-sidebar] {
+  transition: none !important;
+}

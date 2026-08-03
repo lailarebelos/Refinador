@@ -1,17 +1,26 @@
-# Qualtrics Normalizer
+# Refinador
 
 Transforma exports do Qualtrics em planilhas normalizadas prontas para analise.
 
-## Pre-requisito
+## Pre-requisitos
 
 - Python 3.10 ou superior instalado.
-- Baixe em: https://www.python.org/downloads/
-- Durante a instalacao, marque `Add Python to PATH`.
+  - Baixe em: https://www.python.org/downloads/
+  - Durante a instalacao, marque `Add Python to PATH`.
+- Node.js 18 ou superior instalado.
+  - Baixe a versao LTS em: https://nodejs.org
 
 ## Instalacao
 
-1. Execute `instalar.bat`.
-2. Aguarde a conclusao.
+1. Execute `instalar.bat` e aguarde a conclusao (instala as dependencias Python).
+2. Abra um terminal na subpasta `frontend` e execute `npm install`
+   (instala as dependencias da interface).
+
+O passo 2 e obrigatorio e ainda nao esta automatizado no `instalar.bat`. Sem ele,
+o `iniciar.bat` falha com a mensagem "Dependencias do frontend nao instaladas".
+
+Para um passo a passo detalhado, voltado a quem nao tem experiencia tecnica,
+veja [GUIA-DE-INSTALACAO.md](GUIA-DE-INSTALACAO.md).
 
 ## Como usar
 

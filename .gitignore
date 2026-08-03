@@ -1,7 +1,32 @@
+# ── Segredos: NUNCA commitar ──────────────────────────────────────────────────
 .env
+.env.local
+*.env.local
+
+# ── Ambiente Python ───────────────────────────────────────────────────────────
+venv/
 __pycache__/
 *.pyc
-venv/
-.streamlit/
+
+# ── Dependências e build do frontend ──────────────────────────────────────────
+node_modules/
+dist/
+
+# ── Dados de pesquisa e saídas geradas ────────────────────────────────────────
 *.xlsx
+*.qsf
+
+# ── Telemetria de uso e logs ──────────────────────────────────────────────────
+metrics/
+*.log
 diagnostico.log
+uvicorn_err.txt
+emoji_report.txt
+
+# ── Configuração local de ferramentas ─────────────────────────────────────────
+.claude/
+*.code-workspace
+
+# ── Sistema operacional ───────────────────────────────────────────────────────
+Thumbs.db
+.DS_Store
