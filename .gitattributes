@@ -1,0 +1,5 @@
+# Arquivos de lote do Windows PRECISAM de fim de linha CRLF.
+# Com LF, o cmd.exe erra o posicionamento ao processar rotulos "goto" e o
+# script quebra com mensagens do tipo "'ho' nao e reconhecido como comando".
+*.bat text eol=crlf
+*.cmd text eol=crlf

@@ -94,7 +94,38 @@ Instale os dois antes de qualquer outra coisa. São gratuitos e oficiais.
 > aparecer "não é reconhecido como comando", a instalação não foi concluída ou a
 > caixa "Add Python to PATH" não foi marcada — reinstale.
 
-### 2.2 Chaves de IA
+### 2.2 Se o computador não tiver direitos de administrador
+
+Em muitas máquinas corporativas o usuário não é administrador, e aí os
+instaladores comuns falham com uma mensagem de erro genérica. Os dois programas
+funcionam mesmo assim — só a instalação dos pré-requisitos muda.
+
+**Python sem administrador.** Costuma funcionar normalmente: no instalador,
+escolha `Install Now` (que instala só para o seu usuário) e **não** marque
+`Install for all users`. Continue marcando `Add Python to PATH`.
+
+**Node.js sem administrador.** O instalador `.msi` do site precisa de
+administrador. A alternativa é a versão portátil, que é a mesma coisa em formato
+de pasta:
+
+1. Acesse https://nodejs.org e procure a opção de download em `.zip`
+   (na página de downloads, escolha Windows e o formato ZIP, versão LTS).
+2. Extraia a pasta em um lugar simples, por exemplo `C:\node-portable`.
+3. Avise ao Windows onde ela está:
+   - Aperte `Windows`, digite `variáveis de ambiente` e escolha
+     **"Editar as variáveis de ambiente para a sua conta"**.
+   - Em `Variáveis de usuário`, clique na linha `Path` e depois em `Editar`.
+   - Clique em `Novo`, cole o caminho da pasta (ex.: `C:\node-portable`) e
+     confirme com `OK` em todas as janelas.
+4. **Feche todas as janelas de comando abertas** e abra uma nova — só janelas
+   novas reconhecem a mudança.
+5. Confira digitando `node --version` na janela nova.
+
+> Se nem isso for possível na sua máquina, abra um chamado para o TI pedindo a
+> instalação do Node.js LTS e do Python 3.10+. São dois programas gratuitos e de
+> uso comum em análise de dados.
+
+### 2.3 Chaves de IA
 
 Os dois programas usam inteligência artificial, mas de formas diferentes:
 
@@ -120,7 +151,7 @@ Onde obter as chaves do Refinador, se quiser usá-las:
 > crédito atrelado. Nunca mande por e-mail, nunca cole em conversa de grupo,
 > nunca publique em nenhum lugar. Cada pessoa deve usar a própria chave.
 
-### 2.3 Os arquivos dos programas
+### 2.4 Os arquivos dos programas
 
 Baixe as duas pastas (`Refinador` e `Explorador`) e coloque-as em um lugar
 simples do computador, por exemplo:
@@ -130,48 +161,52 @@ C:\Programa Refinador
 C:\Programa Explorador
 ```
 
+> **Use um caminho curto.** Pastas muito longas ou muito aninhadas
+> (`Documentos\Trabalho\Pesquisas\2026\Ferramentas\...`) fazem a instalação
+> falhar com um erro de "nome do arquivo muito grande" — é um limite do próprio
+> Windows. Uma pasta direto no `C:\` é a opção mais segura.
+
 > **Evite pastas sincronizadas** (OneDrive, Google Drive, Dropbox). A
 > sincronização automática atrapalha os arquivos temporários que os programas
-> criam e pode causar erros difíceis de entender. Prefira uma pasta direto no
-> `C:\`.
+> criam e pode deixar tudo lento. Se você já usa uma pasta assim e está
+> funcionando, pode deixar como está — mas se aparecer erro estranho ao iniciar,
+> vale mover para o `C:\` ou excluir as pastas `venv` e `node_modules` da
+> sincronização.
 
 ---
 
 ## 3. Instalando o Refinador
 
-São dois passos. Faça na ordem.
+É um passo só: abra a pasta `Refinador` e dê **dois cliques em `instalar.bat`**.
 
-### Passo 1 — Instalar a parte do Python
+Uma janela preta abre e mostra o progresso em quatro etapas:
 
-Abra a pasta `Refinador` e dê **dois cliques em `instalar.bat`**.
+```
+[1/4] Verificando pre-requisitos...      confere Python e Node.js
+[2/4] Preparando ambiente Python...      baixa as bibliotecas de dados
+[3/4] Preparando a interface...          baixa as bibliotecas da tela
+[4/4] Configuracao final...              cria o arquivo de configuracao
+```
 
-Uma janela preta vai abrir e mostrar o progresso. Leva de 1 a 3 minutos.
-Ao terminar, aparece a mensagem "Instalacao concluida com sucesso!".
-Pressione qualquer tecla para fechar.
+Leva de 2 a 5 minutos no total e mostra bastante texto passando — é normal.
+Ao terminar aparece **"Instalacao concluida com sucesso!"**. Pressione qualquer
+tecla para fechar a janela.
 
-### Passo 2 — Instalar a parte da tela
+> **Não feche a janela no meio.** Se você fechar durante a etapa 2 ou 3, a
+> instalação fica incompleta. Nesse caso basta rodar o `instalar.bat` de novo —
+> ele detecta o que já está pronto e continua de onde parou.
 
-Este passo é feito uma única vez e precisa ser digitado.
+### Se a instalação parar com erro
 
-1. Abra a pasta `Refinador` no Explorador de Arquivos.
-2. Entre na subpasta `frontend`.
-3. Clique na barra de endereço no topo da janela (onde aparece o caminho da
-   pasta), apague o que estiver escrito, digite `cmd` e pressione Enter.
-   Isso abre uma janela preta já posicionada na pasta certa.
-4. Digite o comando abaixo e pressione Enter:
+O instalador avisa exatamente qual etapa falhou. Os dois casos mais comuns:
 
-   ```
-   npm install
-   ```
+| Mensagem | O que fazer |
+|---|---|
+| `ERRO: Python nao encontrado` | Instale o Python (item 2.1) marcando `Add Python to PATH` |
+| `ERRO: Node.js nao encontrado` | Instale o Node.js (item 2.1), ou veja o item 2.2 se você não tiver administrador |
 
-5. Aguarde. Leva de 1 a 3 minutos e mostra bastante texto — é normal.
-   Terminou quando o cursor voltar a piscar esperando um novo comando.
-6. Feche a janela.
-
-> **Por que este passo é separado?** O `instalar.bat` cuida apenas da parte
-> Python. A tela do programa é feita com outra tecnologia (Node.js), que precisa
-> desse comando à parte. Se você pular o Passo 2, ao tentar abrir o programa vai
-> aparecer a mensagem *"ERRO: Dependencias do frontend nao instaladas"*.
+Em qualquer um dos dois, **feche a janela, resolva o pré-requisito e rode o
+`instalar.bat` novamente.**
 
 ### Conferindo
 
@@ -454,8 +489,12 @@ O `instalar.bat` não foi executado, ou foi interrompido no meio.
 Rode `instalar.bat` novamente e espere a mensagem de conclusão.
 
 ### "ERRO: Dependencias do frontend nao instaladas"
-Falta o Passo 2 da instalação do Refinador.
-Abra `cmd` dentro da pasta `frontend` e rode `npm install`.
+A instalação da interface não foi concluída — normalmente porque a janela do
+`instalar.bat` foi fechada no meio, ou porque você está com uma versão antiga do
+programa. **Rode o `instalar.bat` novamente** e deixe chegar até a mensagem final.
+
+Se preferir resolver na mão: abra `cmd` dentro da subpasta `frontend` e rode
+`npm install`.
 
 ### A página fica em branco ou não carrega
 A janela preta correspondente foi fechada. Os programas só funcionam com as
